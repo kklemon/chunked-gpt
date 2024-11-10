@@ -1,0 +1,35 @@
+model:
+  data_config:
+    path: data/enwik9
+    
+  model_config:
+    embed_dim: 64
+    dim: 768
+    depth: 12
+    heads: 12
+
+trainer:
+  max_epochs: 100
+  precision: bf16-mixed
+  gradient_clip_val: 0.5
+  fast_dev_run: false
+  log_every_n_steps: 100
+  logger:
+    class_path: WandbLogger
+    init_args:
+      project: chunked-gpt
+      log_model: false
+  callbacks:
+    - class_path: RichModelSummary
+      init_args:
+        max_depth: 3
+    - class_path: LearningRateMonitor
+      init_args:
+        logging_interval: step
+    - class_path: EarlyStopping
+      init_args:
+        monitor: val/loss
+        mode: min
+        patience: 3
+        verbose: true
+        min_delta: 0.002
