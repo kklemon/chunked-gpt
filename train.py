@@ -134,7 +134,7 @@ class ChunkedGPT(nn.Module):
     def validate_input(self, x):
         if torch.any(x[:, -1] == self.pad_idx):
             raise AssertionError(
-                "GroupedCharGPT expects prepadding but found at least one padding token "
+                "ChunkedGPT expects prepadding but found at least one padding token "
                 "in the last position of the input which indicates postpadding."
             )
 
@@ -182,7 +182,7 @@ class ChunkedGPT(nn.Module):
         group_output = self.decoder(group_input, mask=group_masking)
         group_logits = self.to_logits(group_output)
 
-        return GroupedCharGPTOutput(group_logits, target_indices)
+        return ChunkedGPTOutput(group_logits, target_indices)
 
     def forward_all_targets(self, x):
         b, n = x.shape
