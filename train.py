@@ -379,7 +379,7 @@ class LitChunkedGPT(lit.LightningModule):
             train_kwargs=dict(
                 length=(train_length, train_length + group_size - 1),
                 random_sample=True,
-                num_samples=self.data_config.train_batches_per_epoch
+                num_samples=self.data_config.train_batches_per_epoch * self.trainer.accumulate_grad_batches * self.trainer.world_size
                 * self.data_config.train_batch_size,
             ),
         )
@@ -429,7 +429,7 @@ class LitChunkedGPT(lit.LightningModule):
 
         scheduler = CosineWithWarmupLR(
             opt,
-            len(self.train_dataloader()) * self.trainer.max_epochs,
+            len(self.train_dataloader()) * self.trainer.max_epochs // self.trainer.accumulate_grad_batches,
             warmup_steps=self.training_config.warmup_steps,
         )
 
