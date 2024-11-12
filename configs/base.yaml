@@ -3,7 +3,7 @@ model:
     path: data/enwik9
     
   model_config:
-    embed_dim: 64
+    embed_dim: 128
     dim: 768
     depth: 12
     heads: 12
