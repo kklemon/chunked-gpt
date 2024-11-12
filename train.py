@@ -360,7 +360,11 @@ class LitChunkedGPT(lit.LightningModule):
         eval_length = self.data_config.eval_length * self.model_config.group_size
         
         symbols = np.fromfile(self.data_config.path, dtype=np.uint8)
-        self.vocab, symbols = np.unique(symbols, return_inverse=True)
+        
+        # Skipping uniquization is faster and reduces memory usage
+        #self.vocab, symbols = np.unique(symbols, return_inverse=True)
+        
+        self.vocab = np.arange(256)
 
         self.dataset = LangugeModellingDataset(
             symbols, length=eval_length
