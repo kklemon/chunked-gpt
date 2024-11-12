@@ -23,6 +23,10 @@ from x_transformers import Decoder
 torch.set_float32_matmul_precision('medium')
 
 
+def without_keys(d, keys):
+    return {x: d[x] for x in d if x not in keys}
+
+
 class LangugeModellingDataset(Dataset):
     def __init__(
         self,
@@ -386,9 +390,15 @@ class LitChunkedGPT(lit.LightningModule):
     def prepare_model(self):
         self.model = ChunkedGPT(
             vocab_size=len(self.vocab) + 1,
-            **asdict(self.model_config),
+            **without_keys(
+                asdict(self.model_config),
+                {"compile"},
+            ),
             pad_idx=self.pad_idx,
             rotary_pos_emb=True,
+            use_rmsnorm=True,
+            attn_flash=True,
+            attn_qk_norm=True
         )
     def setup(self, stage: str):
         self.prepare_dataset()
