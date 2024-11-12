@@ -451,9 +451,9 @@ class LitChunkedGPT(lit.LightningModule):
     def training_step(self, batch, batch_idx, log_prefix="train"):
         inputs, targets = batch
 
-        group_logits, group_indices = self.model(inputs)
+        group_logits, target_indices = self.model(inputs)
 
-        target_indices = group_indices - 1
+        target_indices = target_indices - 1
 
         group_targets = targets[:, target_indices]
 
