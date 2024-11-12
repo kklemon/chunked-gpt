@@ -258,6 +258,8 @@ class ModelConfig:
     heads: int = 8
 
     group_size: int = 1
+    
+    compile: bool = True
 
 
 @dataclass
@@ -404,6 +406,10 @@ class LitChunkedGPT(lit.LightningModule):
             attn_flash=True,
             attn_qk_norm=True
         )
+        
+        if self.model_config.compile:
+            self.model = torch.compile(self.model)
+        
     def setup(self, stage: str):
         self.prepare_dataset()
         self.prepare_model()
