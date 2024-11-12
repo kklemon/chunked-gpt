@@ -497,10 +497,5 @@ class LitChunkedGPT(lit.LightningModule):
         print()
         
 
-
-def main():
-    cli = LightningCLI(LitChunkedGPT, save_config_callback=None)
-
-
 if __name__ == "__main__":
-    main()
+    LightningCLI(LitChunkedGPT, save_config_callback=None)
