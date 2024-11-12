@@ -322,10 +322,10 @@ class LitChunkedGPT(lit.LightningModule):
         pad_kwargs = dict(batch_first=True, padding_value=self.pad_idx, padding_side="left")
 
         inputs = pad_sequence(
-            [torch.tensor(item) for item in source_items], **pad_kwargs
+            [torch.tensor(item).long() for item in source_items], **pad_kwargs
         )
         targets = pad_sequence(
-            [torch.tensor(item) for item in target_items], **pad_kwargs
+            [torch.tensor(item).long() for item in target_items], **pad_kwargs
         )
 
         return inputs, targets
